@@ -34,10 +34,10 @@ describe("Testes de unidade do controller de products", function () {
   });
 
   describe("teste com product Id", function () {
-    const expected = {
+    const expected = [{
       id: 1,
       name: "Martelo de Thor",
-    };
+    }];
 
     const fail = { message: "Product not found" };
 
@@ -52,10 +52,9 @@ describe("Testes de unidade do controller de products", function () {
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub();
 
-      sinon.stub(productService, 'getProductById').resolves([expected]);
+      sinon.stub(productService, 'getProductById').resolves(expected);
 
       await productController.getProductById(req, res);
-
       expect(res.status.calledWith(200)).to.be.true;
       expect(res.json.calledWith(expected[0])).to.be.true;
     });

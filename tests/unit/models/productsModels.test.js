@@ -4,11 +4,22 @@ const sinon = require("sinon");
 const connection = require("../../../src/models/connection");
 const productModel = require("../../../src/models/products.model");
 
+const { allProductsResponse } = require("./mocks/products.model.mock");
+
 describe("Testes de unidade do model de products", function () {
-  
-  it("Checa o tipo do retorno", async function () {
-    const list = await productModel.getProducts();
-    expect(list).to.be.an('array');
+  describe("teste com retorno de todos os produtos", function () { 
+    before(async function () {
+      sinon.stub(connection, "execute").resolves([allProductsResponse]);
+    });
+    after(async function () {
+      connection.execute.restore();
+    });
+    it("Checa o tipo do retorno", async function () {
+      const list = await productModel.getProducts();
+      expect(list).to.be.an('array');
+      expect(list).to.be.deep.equal(allProductsResponse);
+    });
+
   });
 
   describe("teste com product Id", function () { 

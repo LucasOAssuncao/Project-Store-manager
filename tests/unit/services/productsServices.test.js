@@ -4,12 +4,21 @@ const sinon = require("sinon");
 const productModel = require("../../../src/models/products.model");
 const productService = require("../../../src/services/products.service");
 
+const { allProductsResponse } = require("./mocks/products.model.mock");
 
 describe("Testes de unidade do service de products", function () {
-  it("Checa o tipo do retorno", async function () {
-    const list = await productService.getProducts();
-    expect(list).to.be.an("array");
-  });
+  describe("teste com todos produtos", function () {
+    before(async function () {
+      sinon.stub(productModel, "getProducts").resolves([allProductsResponse]);
+    });
+    after(async function () {
+      sinon.restore();
+    });
+    it("Checa o tipo do retorno", async function () {
+      const list = await productService.getProducts();
+      expect(list).to.be.an("array");
+    });
+   });
 
   describe("teste com product Id", function () {
     before(async function () {
