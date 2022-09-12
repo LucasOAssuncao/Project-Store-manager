@@ -44,9 +44,23 @@ if (!updated) {
 return res.status(200).json(updated);
 };
 
+const deleteProduct = async (request, response) => {
+  const { id } = request.params;
+
+  const resp = await productService.getProductById(id);
+
+  if (!resp[0]) {
+    return response.status(404).json({ message: 'Product not found' });
+  }
+
+  await productService.deleteProduct(id);
+  return response.sendStatus(204);
+};
+
 module.exports = {
   getProducts,
   getProductById,
   postProduct,
   updateProduct,
+  deleteProduct,
 };
