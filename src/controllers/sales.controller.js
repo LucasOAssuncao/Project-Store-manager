@@ -3,6 +3,21 @@ const {
   validateProduct,
 } = require('../middleware/validationProductId');
 
+const listSales = async (_req, res) => {
+  const resp = await saleService.listSales();
+  console.log('oi');
+  res.status(200).json(resp);
+};
+
+const listSaleById = async (req, res) => {
+  const { id } = req.params;
+  const resp = await saleService.listSaleById(id);
+  if (!resp) {
+    return res.status(404).json({ message: 'Sale not found' });
+  }
+  res.status(200).json(resp);
+};
+
 const doSale = async (req, res) => {
   const requisition = req.body;
   const { message } = validateProduct(requisition);
@@ -24,4 +39,6 @@ const doSale = async (req, res) => {
 
 module.exports = {
   doSale,
+  listSales,
+  listSaleById,
 };

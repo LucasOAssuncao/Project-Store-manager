@@ -17,6 +17,19 @@ const doSale = async (arr) => {
   return { saleId }; 
 };
 
+const listSales = async () => {
+  const sales = await salesModel.listSales();
+  return sales;
+};
+
+const listSaleById = async (id) => {
+  const product = await salesModel.listSaleById(id);
+
+  return product;
+};
+
 module.exports = {
   doSale,
+  listSales,
+  listSaleById,
 };
