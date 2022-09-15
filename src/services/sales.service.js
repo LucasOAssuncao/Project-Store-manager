@@ -28,8 +28,31 @@ const listSaleById = async (id) => {
   return product;
 };
 
+const deleteSale = async (id) => { 
+  await salesModel.deleteSale(id);
+};
+const updateSale = async (saleId, update) => {
+  const productsList = await Promise.all(
+    update.map(({ productId }) => productsModel.getProductById(productId)),
+  );
+
+  const invalidProduct = productsList.some(
+    (product) => !product[0],
+  );
+
+  if (invalidProduct) throw new Error('Product not found');
+
+  await salesModel.deleteInSaleProducts(saleId);
+
+  await Promise.all(
+    update.map((product) => salesModel.insertSale({ saleId, ...product })),
+  );
+};
+
 module.exports = {
   doSale,
   listSales,
   listSaleById,
+  deleteSale,
+  updateSale,
 };
